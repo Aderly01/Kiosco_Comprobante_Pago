@@ -31,7 +31,8 @@ const getEmployee = async(req,res)=>{
                 alertMessage: `NO EXISTE EMPLEADO CON CODIGO ${codigo}`,
                 alertIcon:'error',
                 showConfirmButton: false,
-                timer: 2000
+                timer: 2000,
+                ruta:''
             });
         }else{
             if(data[0].pin == null){
@@ -183,9 +184,9 @@ const pdFormat = async(req,res)=>{
                             timer: 3000,
                             ruta: ''
                         });
-                        print
+                        /* print
                             .print('./pdf/nominaPDF.pdf',optionsP)
-                            .then(console.log); 
+                            .then(console.log);  */
                     }
                 })
             })

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project X</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .tabla {
+          font-family: Verdana;
+          font-size: 27px;
+        }
+        .diadema{
+            font-size: 23px;
+        }
+      </style>
+</head>
+<body class="">
+    <% if(typeof data != 'undefined') {%>
+    <div class="container ps-5 pe-5 w-100">
+        <table class="tabla table-borderless mb-1" width="100%">
+            <tr><td align="center" class="diadema">AGROINDUSTRIAS DIADEMA ZONA FRANCA HONDURAS S.A</td></tr>
+            <tr><td align="center"><strong>COMPROBANTE DE PAGO</strong></td></tr>
+        </table>
+        <table class="tabla table-borderless" width="100%">
+            <tr>
+                <td><strong>Empleado:</strong><%= data.nombre_empleado%></td>
+                <td><strong>ID:</strong><%= data.dni %>
+                <td><strong>Codigo:</strong><%= codigo %>
+            </tr>
+            <tr>
+                <td><strong>Departamento:</strong><%= data.departamento %></td>
+                <td><strong>Desde:</strong><%= inicio %>
+                <td><strong>Dias Trabaj:</strong><%= data.dias_trabajados %>
+            </tr>
+            <tr>
+                <td><strong>Puesto:</strong><%= data.trabajo %></td>
+                <td><strong>Hasta:</strong><%= final %>
+                <% cats.forEach(function(cat){ %>
+                    <% if(cat.nombre == 'Neto a Pagar') { %>
+                        <td><strong>Pago:</strong><strong><u><%= cat.monto %></u></strong>
+                    <% } %>
+                <% }); %>
+            </tr>
+            <tr>
+                <td><strong>Produccion:</strong><%= data.produccion %></td>
+            </tr>
+            <tr>
+                <td><strong>Descripcion:</strong><%= data.descripcion %></td>
+            </tr>
+        </table>
+        <table class="tabla mt-2 mb-2" width="100%" >
+            <tr>
+                <td ><strong>TOTAL INGRESOS:</strong></td>
+                <% cats.forEach(function(cat){ %>
+                    <% if(cat.categoria == 'is_gross') { %>
+                        <td align="right" class="col-2"><strong><%= cat.monto %></strong></td>
+                    <% } %>
+                <% }); %>
+                <td align="center"><strong>TOTAL DEDUCCIONES:</strong></td>
+                <td  class="col-2"><strong><%= totalDeducciones %></strong></td>
+            </tr>
+        </table>
+        <div class="position-relative">
+            <div class="col-6 position-absolute top-0 start-0">
+                <table class="tabla mt-1" width="100%" >
+                    <% cats.forEach(function(cat){ %>
+                        <% if(cat.categoria != 'is_gross') { %>
+                            <% if(cat.categoria != 'is_deduction') { %>
+                                <% if(cat.nombre != 'Neto a Pagar') { %>
+                                    <tr>
+                                        <td >»<%= cat.nombre %>:</td>
+                                        <td class="col-3"><%= cat.monto %></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </table>
+            </div >
+            <div class="col-6 position-absolute top-0 end-0">
+                <table class="tabla mt-1" width="100%" >
+                    <% cats.forEach(function(cat){ %>
+                        <% if(cat.categoria == 'is_deduction') { %>
+                            <tr>
+                                <td >»<%= cat.nombre %>:</td>
+                                <td class="col-3"><%= cat.monto %></td>
+                            </tr>
+                        <% } %>
+                    <% }); %>
+                </table>
+            </div >
+        </div>
+        <!-- <table class="tabla mt-2" width="100%" >
+            <tr>
+                <td align="center">TOTAL INGRESO</td>
+                <td ><strong>1693.25</strong></td>
+                <td align="center">TOTAL DEDUCCIONES</td>
+                <td ><strong>227.15</strong></td>
+            </tr>
+        </table> -->
+    </div>  
+    <% } %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

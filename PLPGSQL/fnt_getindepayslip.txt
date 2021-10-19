@@ -1,0 +1,28 @@
+CREATE OR REPLACE FUNCTION public.fnt_getindepayslip(
+	codigo character varying,
+	fecha date)
+    RETURNS TABLE(nombre character varying, monto numeric, categoria character varying) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+BEGIN
+ 	RETURN QUERY SELECT 
+				hr_payslip_line.name,
+				hr_payslip_line.amount,
+				hr_salary_rule_category.type_category
+				FROM
+				hr_employee
+				INNER JOIN hr_payslip ON hr_employee.id = hr_payslip.employee_id
+				INNER JOIN hr_payslip_line ON hr_payslip.id = hr_payslip_line.slip_id
+				INNER JOIN hr_salary_rule_category ON hr_salary_rule_category.id = hr_payslip_line.category_id
+				WHERE hr_employee.code_employee = codigo
+				AND amount > 0 AND date_from = fecha
+				ORDER BY amount DESC;
+ END
+$BODY$;
+
+ALTER FUNCTION public.fnt_getindepayslip(character varying, date)
+    OWNER TO "adm-rodrice";

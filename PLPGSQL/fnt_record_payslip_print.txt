@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION public.fnt_record_payslip_print(
+	codigo character varying,
+	nombre character varying)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	INSERT INTO	hr_record_payslip_print(code_employee,name_employee,date_printed)
+	VALUES(codigo,nombre,now());
+END
+$BODY$;
+
+ALTER FUNCTION public.fnt_record_payslip_print(character varying, character varying)
+    OWNER TO "adm-rodrice";

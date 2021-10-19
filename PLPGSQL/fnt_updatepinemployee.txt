@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION public.fnt_updatepinemploye(
+	codigo character varying,
+	newpin character varying)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+	UPDATE hr_employee SET pin = newPin
+	WHERE code_employee = codigo;
+END
+$BODY$;
+
+ALTER FUNCTION public.fnt_updatepinemploye(character varying, character varying)
+    OWNER TO "adm-rodrice";

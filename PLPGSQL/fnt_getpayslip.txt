@@ -1,0 +1,30 @@
+CREATE OR REPLACE FUNCTION public.fnt_getpayslip(
+	ide character varying)
+    RETURNS TABLE(nombre_empleado character varying, dni character varying, pin character varying, departamento character varying, trabajo character varying, dias_trabajados double precision, descripcion character varying, produccion character varying, fecha_inicio date, fecha_final date) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+BEGIN
+	return query SELECT 
+			hr_employee.name,
+			hr_employee.identification_id,
+			hr_employee.pin,
+			hr_department.name,
+			hr_job.name,
+			hr_payslip.dias_trabajados,
+			hr_payslip.size_article_payslip,
+			hr_payslip.produccion_empleado_contract,
+			hr_payslip.date_from,
+			hr_payslip.date_to
+			FROM hr_payslip
+		INNER JOIN hr_employee ON hr_employee.id = hr_payslip.employee_id
+		INNER JOIN hr_department ON hr_department.id = hr_employee.department_id
+		INNER JOIN hr_job ON hr_job.id = hr_employee.job_id
+		WHERE hr_employee.code_employee = ide and hr_payslip.state = 'done' order by hr_payslip.date_from desc limit 1;END
+$BODY$;
+
+ALTER FUNCTION public.fnt_getpayslip(character varying)
+    OWNER TO "adm-rodrice";
